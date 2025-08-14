@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>111</title>
+    <link rel="icon" type="image/png" href="fsvicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .content {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .angel-number {
+            font-size: clamp(80px, 15vw, 250px);
+            font-weight: 900;
+            color: #f8f8f8;
+            letter-spacing: 0.1em;
+            user-select: none;
+            animation: glow 3s ease-in-out infinite alternate, float 6s ease-in-out infinite;
+            margin-bottom: 25px;
+            
+            /* 3D Beveled Effect */
+            text-shadow: 
+                /* 3D depth shadows */
+                1px 1px 0 #e8e8e8,
+                2px 2px 0 #d8d8d8,
+                3px 3px 0 #c8c8c8,
+                4px 4px 0 #b8b8b8,
+                5px 5px 0 #a8a8a8,
+                6px 6px 0 #989898,
+                7px 7px 0 #888888,
+                8px 8px 0 #787878,
+                
+                /* Glow effects */
+                0 0 20px rgba(248, 248, 248, 0.8),
+                0 0 40px rgba(248, 248, 248, 0.6),
+                0 0 60px rgba(248, 248, 248, 0.4),
+                0 0 80px rgba(248, 248, 248, 0.3),
+                
+                /* Final shadow for depth */
+                10px 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 
+                    /* 3D depth shadows */
+                    1px 1px 0 #e8e8e8,
+                    2px 2px 0 #d8d8d8,
+                    3px 3px 0 #c8c8c8,
+                    4px 4px 0 #b8b8b8,
+                    5px 5px 0 #a8a8a8,
+                    6px 6px 0 #989898,
+                    7px 7px 0 #888888,
+                    8px 8px 0 #787878,
+                    
+                    /* Glow effects - softer */
+                    0 0 15px rgba(248, 248, 248, 0.6),
+                    0 0 30px rgba(248, 248, 248, 0.4),
+                    0 0 45px rgba(248, 248, 248, 0.3),
+                    0 0 60px rgba(248, 248, 248, 0.2),
+                    
+                    /* Final shadow for depth */
+                    10px 10px 20px rgba(0, 0, 0, 0.3);
+            }
+            to {
+                text-shadow: 
+                    /* 3D depth shadows */
+                    1px 1px 0 #e8e8e8,
+                    2px 2px 0 #d8d8d8,
+                    3px 3px 0 #c8c8c8,
+                    4px 4px 0 #b8b8b8,
+                    5px 5px 0 #a8a8a8,
+                    6px 6px 0 #989898,
+                    7px 7px 0 #888888,
+                    8px 8px 0 #787878,
+                    
+                    /* Glow effects - stronger */
+                    0 0 25px rgba(248, 248, 248, 1),
+                    0 0 50px rgba(248, 248, 248, 0.8),
+                    0 0 75px rgba(248, 248, 248, 0.6),
+                    0 0 100px rgba(248, 248, 248, 0.4),
+                    0 0 125px rgba(248, 248, 248, 0.3),
+                    
+                    /* Final shadow for depth */
+                    10px 10px 25px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Logo in top left */
+        .logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 80px;
+            height: auto;
+            z-index: 10;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 1;
+        }
+
+        /* X logo in top right */
+        .x-logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .x-logo:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .x-logo svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* "the beginning" text */
+        .subtitle {
+            font-size: clamp(16px, 3vw, 24px);
+            color: rgba(248, 248, 248, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            margin-bottom: 35px;
+            font-weight: 300;
+            text-shadow: 
+                1px 1px 0 rgba(200, 200, 200, 0.5),
+                2px 2px 0 rgba(150, 150, 150, 0.3),
+                0 0 10px rgba(248, 248, 248, 0.3),
+                0 0 20px rgba(248, 248, 248, 0.2);
+            animation: subtleGlow 4s ease-in-out infinite alternate;
+        }
+
+        /* Contract Address Box */
+        .ca-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ca-label {
+            font-size: clamp(12px, 2vw, 16px);
+            color: rgba(248, 248, 248, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: 400;
+        }
+
+        .ca-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(10px, 1.5vw, 14px);
+            color: rgba(248, 248, 248, 0.9);
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            user-select: all;
+            word-break: break-all;
+            text-align: center;
+            min-width: 280px;
+            max-width: 90vw;
+        }
+
+        .ca-box:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .ca-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .ca-box:hover::before {
+            left: 100%;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 0 30px;
+        }
+
+        .loading-text {
+            font-size: clamp(16px, 2.5vw, 24px);
+            color: rgba(248, 248, 248, 0.95);
+            text-transform: lowercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 50px;
+            font-weight: 200;
+            line-height: 1.4;
+            text-shadow: 
+                0 0 20px rgba(248, 248, 248, 0.4),
+                0 0 40px rgba(248, 248, 248, 0.2);
+            animation: gentleGlow 4s ease-in-out infinite alternate;
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 350px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 1px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, 
+                rgba(248, 248, 248, 0.6) 0%, 
+                rgba(255, 255, 255, 0.9) 50%, 
+                rgba(248, 248, 248, 0.6) 100%);
+            border-radius: 1px;
+            transition: width 0.4s ease;
+            position: relative;
+            box-shadow: 0 0 15px rgba(248, 248, 248, 0.3);
+        }
+
+        @keyframes gentleGlow {
+            from {
+                text-shadow: 
+                    0 0 20px rgba(248, 248, 248, 0.4),
+                    0 0 40px rgba(248, 248, 248, 0.2);
+            }
+            to {
+                text-shadow: 
+                    0 0 30px rgba(248, 248, 248, 0.6),
+                    0 0 60px rgba(248, 248, 248, 0.3);
+            }
+        }
+
+        /* Hide all main content initially */
+        .main-content {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease 0.5s;
+        }
+
+        .main-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .logo, .x-logo {
+            opacity: 0;
+            transition: opacity 1.5s ease 1s;
+        }
+
+        .logo.loaded, .x-logo.loaded {
+            opacity: 0.9;
+        }
+
+        @keyframes subtleGlow {
+            from {
+                text-shadow: 
+                    1px 1px 0 rgba(200, 200, 200, 0.5),
+                    2px 2px 0 rgba(150, 150, 150, 0.3),
+                    0 0 10px rgba(248, 248, 248, 0.3),
+                    0 0 20px rgba(248, 248, 248, 0.2);
+            }
+            to {
+                text-shadow: 
+                    1px 1px 0 rgba(200, 200, 200, 0.7),
+                    2px 2px 0 rgba(150, 150, 150, 0.5),
+                    0 0 15px rgba(248, 248, 248, 0.5),
+                    0 0 30px rgba(248, 248, 248, 0.3);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .angel-number {
+                font-size: clamp(60px, 12vw, 180px);
+            }
+            
+            .logo {
+                width: 60px;
+                top: 15px;
+                left: 15px;
+            }
+            
+            .x-logo {
+                width: 35px;
+                height: 35px;
+                top: 15px;
+                right: 15px;
+            }
+            
+            .x-logo svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .subtitle {
+                font-size: clamp(14px, 2.5vw, 20px);
+                margin-bottom: 30px;
+            }
+            
+            .ca-box {
+                min-width: 250px;
+                padding: 12px 20px;
+                font-size: clamp(9px, 1.3vw, 12px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .angel-number {
+                font-size: clamp(50px, 10vw, 120px);
+            }
+            
+            .logo {
+                width: 50px;
+                top: 10px;
+                left: 10px;
+            }
+            
+            .x-logo {
+                width: 30px;
+                height: 30px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .x-logo svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .subtitle {
+                font-size: clamp(12px, 2vw, 16px);
+                margin-bottom: 25px;
+                letter-spacing: 0.2em;
+            }
+            
+            .ca-box {
+                min-width: 200px;
+                padding: 10px 15px;
+                font-size: clamp(8px, 1.2vw, 11px);
+            }
+            
+            .ca-label {
+                font-size: clamp(10px, 1.8vw, 14px);
+            }
+            
+            .loading-text {
+                font-size: clamp(14px, 2.5vw, 22px);
+                margin-bottom: 30px;
+            }
+            
+            .progress-container {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-container">
+            <div class="loading-text">a time for new beginnings and opportunities</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <video class="video-background" autoplay muted loop playsinline preload="auto" id="bgVideo">
+        <source src="yerp.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <div class="overlay"></div>
+    
+    <!-- Logo in top left -->
+    <img src="logo (2).gif" alt="Logo" class="logo" id="logo">
+    
+    <!-- X (Twitter) logo in top right -->
+    <div class="x-logo" id="xLogo" onclick="window.open('https://twitter.com', '_blank')">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+    </div>
+    
+    <div class="content main-content" id="mainContent">
+        <div class="angel-number">111</div>
+        <div class="subtitle">the beginning</div>
+        
+        <div class="ca-container">
+            <div class="ca-label">Contract Address</div>
+            <div class="ca-box" onclick="copyToClipboard(this)" title="Click to copy">
+                11111111111111111111111111111
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('bgVideo');
+            const loadingScreen = document.getElementById('loadingScreen');
+            const progressBar = document.getElementById('progressBar');
+            const mainContent = document.getElementById('mainContent');
+            const logo = document.getElementById('logo');
+            const xLogo = document.getElementById('xLogo');
+            
+            // Loading screen animation
+            let progress = 0;
+            const loadingInterval = setInterval(() => {
+                progress += Math.random() * 12; // Slightly slower for better effect
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(loadingInterval);
+                    // Start the reveal sequence
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        // Show main content with staggered animations
+                        setTimeout(() => {
+                            mainContent.classList.add('loaded');
+                        }, 200);
+                        setTimeout(() => {
+                            logo.classList.add('loaded');
+                            xLogo.classList.add('loaded');
+                        }, 800);
+                    }, 800);
+                }
+            }, 180);
+            
+            // Simple play function
+            const playVideo = () => {
+                video.play().catch(e => {
+                    // If autoplay fails, play on user interaction
+                    document.addEventListener('click', () => {
+                        video.play();
+                    }, { once: true });
+                    
+                    document.addEventListener('touchstart', () => {
+                        video.play();
+                    }, { once: true });
+                });
+            };
+
+            // Ensure video properties are set
+            video.muted = true;
+            video.loop = true;
+            video.preload = 'auto';
+            video.playsInline = true;
+            
+            // Force manual restart when video ends
+            video.addEventListener('ended', () => {
+                video.currentTime = 0;
+                video.play();
+            });
+            
+            // Start playing (video loads in background during loading screen)
+            playVideo();
+            
+            // Resume when tab becomes visible
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden && video.paused) {
+                    playVideo();
+                }
+            });
+        });
+
+        // Copy to clipboard function
+        function copyToClipboard(element) {
+            const text = element.textContent.trim();
+            navigator.clipboard.writeText(text).then(function() {
+                // Show copy feedback
+                const originalText = element.innerHTML;
+                element.innerHTML = 'Copied!';
+                element.style.background = 'rgba(0, 255, 0, 0.2)';
+                
+                setTimeout(() => {
+                    element.innerHTML = originalText;
+                    element.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 1500);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const originalText = element.innerHTML;
+                element.innerHTML = 'Copied!';
+                element.style.background = 'rgba(0, 255, 0, 0.2)';
+                
+                setTimeout(() => {
+                    element.innerHTML = originalText;
+                    element.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
